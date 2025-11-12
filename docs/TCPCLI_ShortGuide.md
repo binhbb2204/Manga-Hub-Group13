@@ -94,13 +94,72 @@ TCP Sync Status:
 
 ## Commands Summary
 
-| Command | Description |
-|---------|-------------|
-| `mangahub auth login --username <name>` | Login (required before sync) |
-| `.\bin\tcp-server.exe` | Start TCP sync server |
-| `mangahub sync connect` | Connect to server |
-| `mangahub sync status` | Check connection status |
-| `Ctrl+C` (in Terminal 2) | Disconnect gracefully |
+| Command | Description | Example |
+|---------|-------------|---------|
+| `mangahub auth login --username <name>` | Login (required before sync) | `mangahub auth login --username johndoe` |
+| `.\bin\tcp-server.exe` | Start TCP sync server | Run in Terminal 1 |
+| `mangahub sync connect` | Connect to server | `mangahub sync connect --device-name "MyLaptop"` |
+| `mangahub sync status` | Check connection status with live stats | Shows messages, devices, RTT |
+| `mangahub sync monitor` | Watch real-time sync events | See updates as they happen |
+| `mangahub sync disconnect` | Disconnect gracefully | Or press Ctrl+C in connect terminal |
+| `Ctrl+C` (in Terminal 2) | Disconnect gracefully | In the sync connect terminal |
+
+---
+
+## New Features ✨
+
+### Live Status with Server Query
+`sync status` now queries the TCP server for real-time data:
+```powershell
+mangahub sync status
+```
+
+**What you'll see:**
+```
+TCP Sync Status:
+
+  Connection: ✓ Active
+  Server: localhost:9090
+  Uptime: 1h 23m 45s
+  Last heartbeat: 3 seconds ago
+
+Session Info:
+  User: johndoe
+  Session ID: sess_mylaptop_desktop_12112025T150000_a1b2
+  Devices online: 2
+
+Sync Statistics:
+  Messages sent: 15
+  Messages received: 8
+  Last sync: 45 seconds ago (One Piece ch. 1095)
+  Sync conflicts: 0
+
+Network Quality: Excellent (RTT: 12ms)
+```
+
+### Real-Time Monitoring
+Watch sync events as they happen across all your devices:
+```powershell
+mangahub sync monitor
+```
+
+**What you'll see:**
+```
+✓ Subscribed to real-time updates
+Monitoring sync events... (Press Ctrl+C to exit)
+
+[15:23:45] ← updated: Jujutsu Kaisen (Chapter 248)
+[15:24:12] → updated: One Piece (Chapter 1095)
+[15:24:50] ← updated: Demon Slayer (Chapter 157)
+
+Stopping monitor...
+✓ Monitoring stopped
+```
+
+**Legend:**
+- `←` = Update from another device
+- `→` = Update from this device
+- `[HH:MM:SS]` = Timestamp
 
 ---
 
